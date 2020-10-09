@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Copyright 2011-2012, Cypress Semiconductor Corporation.  All rights reserved.
- * You may use this file only in accordance with the license, terms, conditions, 
- * disclaimers, and limitations in the end user license agreement accompanying 
- * the software package with which this file was provided.
- ********************************************************************************/
+* Copyright 2011-2012, Cypress Semiconductor Corporation.  All rights reserved.
+* You may use this file only in accordance with the license, terms, conditions, 
+* disclaimers, and limitations in the end user license agreement accompanying 
+* the software package with which this file was provided.
+********************************************************************************/
 
 #ifndef __CYBTLDR_UTILS_H__
 #define __CYBTLDR_UTILS_H__
@@ -31,7 +31,7 @@
 /* Completed successfully */
 #ifndef CYRET_SUCCESS
 #define CYRET_SUCCESS           0x00
-#endif	
+#endif
 /* File is not accessable */
 #define CYRET_ERR_FILE          0x01
 /* Reached the end of the file */
@@ -111,13 +111,13 @@
  *    VERSION INFORMATION
  ******************************************************************************
  *
- * Major – Used to indicate binary compatibility.  If a change is incompatible
+ * Major â€“ Used to indicate binary compatibility.  If a change is incompatible
  *         in any way with the prior release, the major version number will be
  *         updated.
- * Minor – Used to indicate feature set.  If a new feature or functionality is
+ * Minor â€“ Used to indicate feature set.  If a new feature or functionality is
  *         added beyond what was available in a prior release, the this number
  *         will be updated.
- * Patch – Used to indicate very minor fixes.  If the code was modified to fix
+ * Patch â€“ Used to indicate very minor fixes.  If the code was modified to fix
  *         a defect or to improve the quality in any way that does not add new
  *         functionality or change APIs this version number will be updated.
  *
