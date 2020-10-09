@@ -1,30 +1,31 @@
-SRC=main.c communication_api.c cybtldr_api.c cybtldr_command.c cybtldr_parse.c
+SRC=main.c comm_api_spi.c cybtldr_api.c cybtldr_command.c cybtldr_parse.c
 OBJ=$(subst .c,.o,$(SRC))
-all: cybootload_linux
+all: cybootload
 
 %.o: %.c
+#	gcc -DDEBUG -Wall -g -c $< -o $@
 	gcc -Wall -g -c $< -o $@
 
-cybootload_linux: $(OBJ)
+cybootload: $(OBJ)
 	gcc -Wall -g -o $@ $+
 
 test1:
-	./cybootload_linux "test/Bootloadable Blinking LED.cyacd"
+	./cybootload "test/Bootloadable Blinking LED.cyacd"
 test2:
-	./cybootload_linux test/CY8CKIT-049-41XX_GPIO_Example.cyacd
+	./cybootload test/CY8CKIT-049-41XX_GPIO_Example.cyacd
 test3:
-	./cybootload_linux test/CY8CKIT-049-41XX_PWM_Example.cyacd
+	./cybootload test/CY8CKIT-049-41XX_PWM_Example.cyacd
 
 test4:
-	./cybootload_linux test/CY8CKIT-049-41XX_UART_Example.cyacd
+	./cybootload test/CY8CKIT-049-41XX_UART_Example.cyacd
 
 clean:
-	-rm *.o cybootload_linux 
+	-rm *.o cybootload
 
 StringImage.h: "Bootloadable Blinking LED.cyacd"
 	perl conv.pl "$<"
 
 
-gdb: cybootload_linux
+gdb: cybootload
 	-rm -f gdb.log
 	gdb -batch -x run.gdb
