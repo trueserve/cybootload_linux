@@ -18,23 +18,27 @@ firmware to a device connected to a Raspberry Pi via SPI pins.
 Configure your bootloader as "Custom interface" and use the comms functions present in `bootloadable/custom_bootloader.c`.
 
 ### Examples included:
+* * LED demo: LED starts blinking at a slow speed.
 * > make test
 ./cybootload "Bootloadable Blinking LED.cyacd"
-* * Once programmed, LED starts blinking at a slow speed.
 
+
+* * GPIO demo: once programmed, press SW1 swich on board to lit the LED. When SW1 is released,
+light goes off. 
 * > make test1
 ./cybootload CY8CKIT-049-41XX_GPIO_Example.cyacd
-* * Once programmed, press SW1 swich on board to lit the LED. When SW1 is released,
-light goes off. 
 
+
+* * LED PWM demo: lights from low intensity to high and then to low, and repeats.
 * > make test2
 ./cybootload_linux CY8CKIT-049-41XX_PWM_Example.cyacd
-* * Once programmed, LED lits from low intensity to high and then to low, and repeats.
 
+
+* * UART demo: start minicom -D /dev/ttyACM0, and press SW1 switch on board.
+* * minicom displays `Hello World!`.
 * > make test2
 ./cybootload_linux CY8CKIT-049-41XX_UART_Example.cyacd
-* * Once programmed, start minicom -D /dev/ttyACM0, and press SW1 switch on board.
-* * minicom displays `Hello World!`.
+
 
 ### Ref:
 PSoC® 3, PSoC 4, and PSoC 5LP UART Bootloader AN68272 
