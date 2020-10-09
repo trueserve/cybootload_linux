@@ -1,5 +1,8 @@
 An attempt to use Cypress AN68272 "UART Bootloader Host" on Linux, by modifying
-communication_api.c and main.c
+`communication_api.c` and `main.c`.
+
+This version supports SPI bootloading, which as an example is useful for updating
+firmware to a device connected to a Raspberry Pi via SPI pins.
 
 Build:
 	make
@@ -7,8 +10,12 @@ Build:
 
 Usage:
 	./cybootload_linux "./Bootloadable Blinking LED.cyacd"
-	./cybootload -d /dev/ttyACM0 CY8CKIT-049-41XX_PWM_Example.cyacd
-	./cybootload -d /dev/ttyACM0 -s 115200 CY8CKIT-049-41XX_UART_Example.cyacd
+	./cybootload -d /dev/spidev0.0 CY8CKIT-049-41XX_PWM_Example.cyacd
+	./cybootload -d /dev/spidev0.0 -s 1000000 CY8CKIT-049-41XX_UART_Example.cyacd
+
+Bootloader Functions:
+	Configure your bootloader as "Custom interface" and use the comms functions
+	present in `bootloadable/custom_bootloader.c`.
 
 Examples included:
 make test
