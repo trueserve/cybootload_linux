@@ -49,9 +49,9 @@ uint16_t comm_delay = 0;
  *******************************************************************************/
 int OpenConnection(void)
 {
-  /*
-    UART_Start();
-  */
+	/*
+	UART_Start();
+	*/
 	if (comm_dev == NULL) {
 		if ((comm_dev = strdup(COMM_DEV_DEFAULT)) == NULL) {
 			printf("[ERROR] malloc failed\n");
@@ -97,12 +97,12 @@ int OpenConnection(void)
  *******************************************************************************/
 int CloseConnection(void)
 {
-  /*
-    UART_Stop();
-  */
-  printf("[INFO] Closing communications device\n");
-  close(spi_fd);
-  return(CYRET_SUCCESS);
+	/*
+	UART_Stop();
+	*/
+	printf("[INFO] Closing communications device\n");
+	close(spi_fd);
+	return(CYRET_SUCCESS);
 }
 
 /*******************************************************************************
@@ -128,26 +128,7 @@ int WriteData(uint8* wrData, int byteCnt)
 		return(CYRET_ERR_COMM_MASK);
 	}
 
-
-/*
-  struct spi_ioc_transfer tx = {
-	.rx_buf = 0,
-	.tx_buf = (unsigned long)wrData,
-	.len = byteCnt,
-	.speed_hz = comm_speed,
-	.bits_per_word = comm_bits,
-	.delay_usecs = comm_delay,
-  };
-
-  if (ioctl(spi_fd, SPI_IOC_MESSAGE(1), &tx) == -1) {
-	printf("[ERR.] Write to target fail\n");
-	return(CYRET_ERR_COMM_MASK);
-  }
-*/
-
-  // usleep(4000);
-
-  return(CYRET_SUCCESS);
+	return(CYRET_SUCCESS);
 }
 
 
@@ -169,58 +150,31 @@ int WriteData(uint8* wrData, int byteCnt)
  *******************************************************************************/
 int ReadData(uint8* rdData, int byteCnt)
 {
-  //  read(tty_fd,rdData,byteCnt);
-  /* Read the data bytes */      
-  /*
-  uint16 timeOut =1;
-  uint8 dataIndexCntr = 0;
-  while (read(spi_fd, &rdData[dataIndexCntr], 1) == -1) {
-    timeOut++;
-    if (timeOut == 0) {
-	printf("[ERR.] Read from target fail\n");
-	return(CYRET_ERR_COMM_MASK);
-      }
-  }
+	// need to wait before reading, just in case we've just
+	// sent and started a flash page write operation...
+	// per datasheet, the longest time should be 20ms
+	usleep(20000);
 
-  dataIndexCntr++;
-  byteCnt--;
-  while (byteCnt>0) {
-      if (read(spi_fd, &rdData[dataIndexCntr++], 1) == -1) {
-	printf("[ERR.] Reading data: %s\n", strerror(errno));
-	return(CYRET_ERR_COMM_MASK);
-      }
-      if (usleep(1) == -1) {
-	printf("[ERR.] usleep : %s\n",strerror(errno));
-      }
-      byteCnt--;
-    }
-  */
+	struct spi_ioc_transfer rx = {
+		.rx_buf = (unsigned long)rdData,
+		.tx_buf = 0,
+		.len = byteCnt,
+		.speed_hz = comm_speed,
+		.bits_per_word = comm_bits,
+		.delay_usecs = comm_delay,
+	};
 
-  // just in case we're in a flash write operation...
-  // per datasheet, the longest time should be 20ms
-  usleep(20000);
+	if (ioctl(spi_fd, SPI_IOC_MESSAGE(1), &rx) == -1) {
+		printf("[ERR.] Read from target fail\n");
+		return(CYRET_ERR_COMM_MASK);
+	}
 
-  struct spi_ioc_transfer rx = {
-	.rx_buf = (unsigned long)rdData,
-	.tx_buf = 0,
-	.len = byteCnt,
-	.speed_hz = comm_speed,
-	.bits_per_word = comm_bits,
-	.delay_usecs = comm_delay,
-  };
+	// sometimes byte comms don't work correctly?
+	// we've made sure the bootloader is set to 1ms, so just make sure
+	// we're longer than that
+	usleep(1200);
 
-  if (ioctl(spi_fd, SPI_IOC_MESSAGE(1), &rx) == -1) {
-	printf("[ERR.] Read from target fail\n");
-	return(CYRET_ERR_COMM_MASK);
-  }
-
-  // sometimes byte comms don't work correctly?
-  // we've made sure the bootloader is set to 1ms, so just make sure
-  // we're longer than that
-  usleep(1200);
-
-  return(CYRET_SUCCESS);
+	return(CYRET_SUCCESS);
 }
 
 /* [] END OF FILE */
-
